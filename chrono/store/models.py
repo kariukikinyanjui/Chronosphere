@@ -10,6 +10,11 @@ class Category(models.Model):
         Returns a string representation of the Category object.
         """
         return self.name
+
+    class Meta:
+        """Metadata for the Category model."""
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
     
 class Customer(models.Model):
     """ Represents a customer with a first name, last name, phone number, password, and email. """
@@ -30,7 +35,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
-    description = models.CharField(max_length=200, null=True, blank=True, default='')
+    description = models.CharField(max_length=400, null=True, blank=True, default='')
     image = models.ImageField(upload_to='uploadsproducts/', null=True, blank=True)
 
     def __str__(self):
@@ -40,6 +45,7 @@ class Product(models.Model):
         return self.name
     
 class Order(models.Model):
+    """ Represents an order with a product, customer, quantity, address, phone, date, and status. """
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
