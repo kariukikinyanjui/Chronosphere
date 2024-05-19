@@ -5,6 +5,11 @@ class Category(models.Model):
     """ Represents a category with a name field. """
     name = models.CharField(max_length=200)
 
+    class Meta:
+        """ Meta class for the Category model. """
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
     def __str__(self):
         """
         Returns a string representation of the Category object.
