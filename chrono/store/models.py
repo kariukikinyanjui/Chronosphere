@@ -15,11 +15,6 @@ class Category(models.Model):
         Returns a string representation of the Category object.
         """
         return self.name
-
-    class Meta:
-        """Metadata for the Category model."""
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
     
 class Customer(models.Model):
     """ Represents a customer with a first name, last name, phone number, password, and email. """
