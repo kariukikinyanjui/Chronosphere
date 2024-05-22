@@ -6,7 +6,7 @@ from .models import Product
 def index(request):
     """This function renders the 'index.html' template when the 'home' view is accessed.
 
-    :param request: 
+    :param request:
 
     """
     products = Product.objects.all()
@@ -16,7 +16,7 @@ def index(request):
 def about(request):
     """This function renders the 'about.html' template when the 'about' view is accessed.
 
-    :param request: 
+    :param request:
 
     """
     return render(request, "about.html")
