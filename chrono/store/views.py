@@ -7,3 +7,9 @@ def index(request):
     """
     products = Product.objects.all()
     return render(request, 'index.html', {'products': products})
+
+def about(request):
+    """
+    This function renders the 'about.html' template when the 'about' view is accessed.
+    """
+    return render(request, 'about.html')
