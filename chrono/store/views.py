@@ -1,42 +1,34 @@
 from django import forms
 from django.contrib import messages
-from django.contrib.auth import authenticate
-from django.contrib.auth import login
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .forms import SignUpForm
 from .models import Product
-
 
 def index(request):
     """This function renders the 'index.html' template when the 'home' view is accessed.
 
-    :param request:
-
+    :param request: HTTP request object
     """
     products = Product.objects.all()
     return render(request, "index.html", {"products": products})
 
-
 def about(request):
     """This function renders the 'about.html' template when the 'about' view is accessed.
 
-    :param request:
+    :param request: HTTP request object
     """
     return render(request, "about.html")
-
 
 def login_user(request):
     """A function that logs in the user
 
-    :param request:
-
+    :param request: HTTP request object
     """
     if request.method == "POST":
-        """Login user"""
+        # Login user
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
@@ -45,35 +37,31 @@ def login_user(request):
             messages.success(request, "You have been logged in!")
             return redirect("index")
         else:
-            messages.success(request, "Error logging in")
+            messages.error(request, "Error logging in")
             return redirect("login")
     else:
         return render(request, "login.html", {})
 
-
 def logout_user(request):
     """A function that logs out the user
 
-    :param request:
-
+    :param request: HTTP request object
     """
     logout(request)
     messages.success(request, "You have been logged out!")
     return redirect("index")
 
-
 def register_user(request):
     """A function that registers the user
 
-    :param request:
-
+    :param request: HTTP request object
     """
     form = SignUpForm()
     if request.method == "POST":
-        """Register user"""
+        # Register user
         form = SignUpForm(request.POST)
         if form.is_valid():
-            """Save user"""
+            # Save user
             form.save()
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password1"]
@@ -82,11 +70,9 @@ def register_user(request):
             messages.success(request, "You have successfully registered")
             return redirect("index")
         else:
-            """Show errors if user not saved"""
-            messages.success(request, "Error registering user")
+            # Show errors if user not saved
+            messages.error(request, "Error registering user")
             return redirect("register")
     else:
-        """Render registration form"""
+        # Render registration form
         return render(request, "register.html", {"form": form})
-    """
-    return render(request, "about.html")
