@@ -15,7 +15,7 @@ from .models import Product
 def index(request):
     """This function renders the 'index.html' template when the 'home' view is accessed.
 
-    :param request: 
+    :param request:
 
     """
     products = Product.objects.all()
@@ -25,7 +25,7 @@ def index(request):
 def about(request):
     """This function renders the 'about.html' template when the 'about' view is accessed.
 
-    :param request: 
+    :param request:
 
     """
     return render(request, "about.html")
@@ -34,7 +34,7 @@ def about(request):
 def login_user(request):
     """A function that logs in the user
 
-    :param request: 
+    :param request:
 
     """
     if request.method == "POST":
@@ -56,7 +56,7 @@ def login_user(request):
 def logout_user(request):
     """A function that logs out the user
 
-    :param request: 
+    :param request:
 
     """
     logout(request)
@@ -67,7 +67,7 @@ def logout_user(request):
 def register_user(request):
     """A function that registers the user
 
-    :param request: 
+    :param request:
 
     """
     form = SignUpForm()
