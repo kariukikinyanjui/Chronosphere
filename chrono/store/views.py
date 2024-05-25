@@ -10,22 +10,30 @@ from .models import Product
 
 
 def index(request):
-    """
-    This function renders the 'index.html' template when the 'home' view is accessed.
+    """This function renders the 'index.html' template when the 'home' view is accessed.
+
+    :param request: 
+
     """
     products = Product.objects.all()
     return render(request, "index.html", {"products": products})
 
 
 def about(request):
-    """
-    This function renders the 'about.html' template when the 'about' view is accessed.
+    """This function renders the 'about.html' template when the 'about' view is accessed.
+
+    :param request: 
+
     """
     return render(request, "about.html")
 
 
 def login_user(request):
-    """A function that logs in the user"""
+    """A function that logs in the user
+
+    :param request: 
+
+    """
     if request.method == "POST":
         """Login user"""
         username = request.POST["username"]
@@ -43,14 +51,22 @@ def login_user(request):
 
 
 def logout_user(request):
-    """A function that logs out the user"""
+    """A function that logs out the user
+
+    :param request: 
+
+    """
     logout(request)
     messages.success(request, "You have been logged out!")
     return redirect("index")
 
 
 def register_user(request):
-    """A function that registers the user"""
+    """A function that registers the user
+
+    :param request: 
+
+    """
     form = SignUpForm()
     if request.method == "POST":
         """Register user"""
