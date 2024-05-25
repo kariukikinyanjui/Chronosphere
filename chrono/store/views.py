@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm
 
+
 def index(request):
     """
     This function renders the 'index.html' template when the 'home' view is accessed.
@@ -14,11 +15,13 @@ def index(request):
     products = Product.objects.all()
     return render(request, 'index.html', {'products': products})
 
+
 def about(request):
     """
     This function renders the 'about.html' template when the 'about' view is accessed.
     """
     return render(request, 'about.html')
+
 
 def login_user(request):
     """ A function that logs in the user"""
@@ -37,11 +40,13 @@ def login_user(request):
     else:
         return render(request, 'login.html', {})
 
+
 def logout_user(request):
-   """ A function that logs out the user"""
-   logout(request)
-   messages.success(request, 'You have been logged out!')
-   return redirect('index')
+    """ A function that logs out the user"""
+    logout(request)
+    messages.success(request, 'You have been logged out!')
+    return redirect('index')
+
 
 def register_user(request):
     """ A function that registers the user"""
