@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from .forms import SignUpForm
-from .models import Product
+from .models import Product, Category
 
 def index(request):
     """This function renders the 'index.html' template when the 'home' view is accessed.
@@ -76,3 +76,30 @@ def register_user(request):
     else:
         # Render registration form
         return render(request, "register.html", {"form": form})
+    return render(request, "about.html")
+
+def product(request, pk):
+    """This function renders the 'product.html' template when the 'product' view is accessed.
+
+    :param request: HTTP request object
+    :param pk: product id
+
+    """
+    product = Product.objects.get(id=pk)
+    return render(request, "product.html", {"product": product})
+
+def category(request, abc):
+    """This function renders the 'category.html' template when the 'category' view is accessed.
+
+    :param request: HTTP request object
+    :param abc: category id
+
+    """
+    abc = abc.replace("-", " ")
+    try:
+        category = Category.objects.get(name=abc)
+        products = Product.objects.filter(category=category)
+        return render(request, "category.html", {"category": category, "products": products})
+    except:
+        messages.success(request, "Category does not exist")
+        return redirect("index")
