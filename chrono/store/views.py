@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.shortcuts import render
 from .forms import SignUpForm
-from .models import Product
+from .models import Product, Category
 
 
 def index(request):
@@ -99,3 +99,19 @@ def product(request, pk):
     """
     product = Product.objects.get(id=pk)
     return render(request, "product.html", {"product": product})
+
+def category(request, abc):
+    """This function renders the 'category.html' template when the 'category' view is accessed.
+
+    :param request:
+    :param abc: category id
+
+    """
+    abc = abc.replace("-", " ")
+    try:
+        category = Category.objects.get(name=abc)
+        products = Product.objects.filter(category=category)
+        return render(request, "category.html", {"category": category, "products": products})
+    except:
+        messages.success(request, "Category does not exist")
+        return redirect("index")
