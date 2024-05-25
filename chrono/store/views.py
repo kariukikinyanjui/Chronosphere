@@ -7,7 +7,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.shortcuts import render
-
 from .forms import SignUpForm
 from .models import Product
 
@@ -26,7 +25,6 @@ def about(request):
     """This function renders the 'about.html' template when the 'about' view is accessed.
 
     :param request:
-
     """
     return render(request, "about.html")
 
@@ -90,3 +88,5 @@ def register_user(request):
     else:
         """Render registration form"""
         return render(request, "register.html", {"form": form})
+    """
+    return render(request, "about.html")
