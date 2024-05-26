@@ -1,4 +1,4 @@
-from store.models import Product, Profile
+from store.models import Product
 
 class Cart():
 	def __init__(self, request):
@@ -46,7 +46,6 @@ class Cart():
 		if product_id in self.cart:
 			pass
 		else:
-			#self.cart[product_id] = {'price': str(product.price)}
 			self.cart[product_id] = int(product_qty)
 
 		self.session.modified = True
@@ -86,17 +85,17 @@ class Cart():
 		return total
 
 
-
+		#Get the length of the cart and return it
 	def __len__(self):
 		return len(self.cart)
 
 	def get_prods(self):
-		# Get ids from cart
+		# This gets products from cart
 		product_ids = self.cart.keys()
-		# Use ids to lookup products in database model
+		# Use ids to check for the products in database model
 		products = Product.objects.filter(id__in=product_ids)
 
-		# Return those looked up products
+		# Returns found products
 		return products
 
 	def get_quants(self):
@@ -115,7 +114,7 @@ class Cart():
 		self.session.modified = True
 
 
-		# Deal with logged in user
+		# logged in user
 		if self.request.user.is_authenticated:
 			# Get the current user profile
 			current_user = Profile.objects.filter(user__id=self.request.user.id)
@@ -137,7 +136,7 @@ class Cart():
 
 		self.session.modified = True
 
-		# Deal with logged in user
+		# logged in user
 		if self.request.user.is_authenticated:
 			# Get the current user profile
 			current_user = Profile.objects.filter(user__id=self.request.user.id)

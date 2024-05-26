@@ -27,9 +27,9 @@ def cart_add(request):
     """
     cart = Cart(request)
 
-    # Check if the request is a POST request
+    # Retrieves the cart and Check if the request is POST request
     if request.POST.get('action') == 'post':
-        # Get product ID and quantity from the request
+        # Retrievs product ID and quantity from the request
         product_id = int(request.POST.get('product_id'))
         product_qty = int(request.POST.get('product_qty'))
 
@@ -39,7 +39,7 @@ def cart_add(request):
         # Add product to the cart
         cart.add(product=product, quantity=product_qty)
 
-        # Get updated cart quantity
+        # Get the new cart quantity
         cart_quantity = cart.__len__()
 
         # Return JsonResponse with the updated cart quantity
