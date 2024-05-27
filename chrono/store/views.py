@@ -88,6 +88,10 @@ def register_user(request):
         return render(request, "register.html", {"form": form})
 
 
+def product(request,pk):
+	product = Product.objects.get(id=pk)
+	return render(request, 'product.html', {'product':product})
+
 def product(request, pk):
     """This function renders the 'product.html' template when the 'product' view is accessed.
 
