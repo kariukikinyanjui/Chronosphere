@@ -41,7 +41,7 @@ def cart_add(request):
         cart_quantity = cart.__len__()
         # Return JsonResponse with the updated cart quantity
         response = JsonResponse({'qty': cart_quantity})
-        messages.success(request, "Product Added To Cart...")
+        messages.success(request, "Watch Added To Cart...")
         return response
 
 
@@ -61,7 +61,7 @@ def cart_delete(request):
         cart.delete(product=product_id)
         # Returns the JsonResponse with the ID of the deleted product
         response = JsonResponse({'product': product_id})
-        messages.success(request, "Item Deleted From Shopping Cart...")
+        messages.success(request, "Watch Removed From Shopping Cart...")
         return response
 
 
@@ -82,5 +82,5 @@ def cart_update(request):
         cart.update(product=product_id, quantity=product_qty)
         # Gives JsonResponse with the updated quantity
         response = JsonResponse({'qty': product_qty})
-        messages.success(request, "Your Cart Has Been Updated...")
+        messages.success(request, "Cart Has Been Updated...")
         return response
