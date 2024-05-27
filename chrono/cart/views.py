@@ -6,68 +6,62 @@ from django.contrib import messages
 
 def cart_summary(request):
     """
-    View to display the cart summary page.
+    This View displays the cart summary page.
 
-    :param request: HTTP request object
-    :return: Rendered cart summary page with cart products, quantities, and total
+    :param request: The HTTP request object
+    :return: It returns a rendered cart_summary_page that has cart products, quantities, and total
     """
-    cart = Cart(request)
-    cart_products = cart.get_prods
-    quantities = cart.get_quants
-    totals = cart.cart_total()
+    cart = Cart(request) # Initialize the shopping cart
+    cart_products = cart.get_prods # Retrieve cart products and their details
+    quantities = cart.get_quants  # Retrieve quantities of products in the cart
+    totals = cart.cart_total() # Calculate the total cost of the items in the cart
+     # Render the cart summary page with the cart details
     return render(request, "cart_summary.html", {"cart_products": cart_products, "quantities": quantities, "totals": totals})
 
 
 def cart_add(request):
     """
-    View to add a product to the cart.
+    View that adds a product to the cart.
 
-    :param request: HTTP request object
-    :return: JsonResponse with the updated cart quantity or error message
+    :param request: The HTTP request object
+    :return: Gives a JsonResponse with the updated cart quantity or error message
     """
     cart = Cart(request)
 
-    # Retrieves the cart and Check if the request is POST request
+    # Fetches the cart and Check if the request is POST request
     if request.POST.get('action') == 'post':
-        # Retrievs product ID and quantity from the request
+        # Fetches product ID and quantity from the request
         product_id = int(request.POST.get('product_id'))
         product_qty = int(request.POST.get('product_qty'))
-
-        # Lookup product in the database
+        # Looksup product in the database
         product = get_object_or_404(Product, id=product_id)
-
-        # Add product to the cart
+        # Puts the product to the cart
         cart.add(product=product, quantity=product_qty)
-
-        # Get the new cart quantity
+        # Gets the new cart quantity
         cart_quantity = cart.__len__()
-
         # Return JsonResponse with the updated cart quantity
         response = JsonResponse({'qty': cart_quantity})
-        messages.success(request, "Product Added To Cart...")
+        messages.success(request, "Watch Added To Cart...")
         return response
 
 
 def cart_delete(request):
     """
-    View to delete a product from the cart.
+    View that deletes a product from the cart.
 
-    :param request: HTTP request object
-    :return: JsonResponse with the ID of the deleted product or error message
+    :param request: The HTTP request object
+    :return: gives a JsonResponse with the ID of the deleted product or error message
     """
-    cart = Cart(request)
-
-    # Check if the request is a POST request
+    cart = Cart(request) # Initialize the shopping cart
+    # Check whether the request is a POST request
     if request.POST.get('action') == 'post':
-        # Get product ID from the request
+        # Gets product Identity from the request
         product_id = int(request.POST.get('product_id'))
-
-        # Delete product from the cart
+        # Deletes product from the cart
         cart.delete(product=product_id)
-
-        # Return JsonResponse with the ID of the deleted product
+        # Returns the JsonResponse with the ID of the deleted product
         response = JsonResponse({'product': product_id})
-        messages.success(request, "Item Deleted From Shopping Cart...")
+        messages.success(request, "Watch Removed From Shopping Cart...")
         return response
 
 
@@ -78,18 +72,15 @@ def cart_update(request):
     :param request: HTTP request object
     :return: JsonResponse with the updated quantity or error message
     """
-    cart = Cart(request)
-
+    cart = Cart(request) # Initialize the shopping cart
     # Check if the request is a POST request
     if request.POST.get('action') == 'post':
         # Get product ID and new quantity from the request
         product_id = int(request.POST.get('product_id'))
         product_qty = int(request.POST.get('product_qty'))
-
-        # Update the product quantity in the cart
+        # Puts the product quantity in the cart
         cart.update(product=product_id, quantity=product_qty)
-
-        # Return JsonResponse with the updated quantity
+        # Gives JsonResponse with the updated quantity
         response = JsonResponse({'qty': product_qty})
-        messages.success(request, "Your Cart Has Been Updated...")
+        messages.success(request, "Cart Has Been Updated...")
         return response

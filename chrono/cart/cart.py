@@ -2,19 +2,22 @@ from store.models import Product
 
 class Cart():
 	def __init__(self, request):
+		"""
+        Initializes the Cart object.
+
+        :param request: The HTTP request object
+        """
 		self.session = request.session
-		# Get request
+		# Acquires the request
 		self.request = request
-		# Get the current session key if it exists
+		# Gets the current session key if it exists
 		cart = self.session.get('session_key')
 
-		# If the user is new, no session key!  Create one!
+		# If new user hence, no session key!  Create one!
 		if 'session_key' not in request.session:
 			cart = self.session['session_key'] = {}
-
-
-		# Make sure cart is available on all pages of site
-		self.cart = cart
+		# Ensure that the cart data is available on all pages of the site
+		self.cart = cart # Holds the current state of the cart
 
 	def db_add(self, product, quantity):
 		product_id = str(product)
@@ -32,7 +35,6 @@ class Cart():
 		if self.request.user.is_authenticated:
 			# Get the current user profile
 			current_user = Profile.objects.filter(user__id=self.request.user.id)
-			# Convert {'3':1, '2':4} to {"3":1, "2":4}
 			carty = str(self.cart)
 			carty = carty.replace("\'", "\"")
 			# Save carty to the Profile Model
@@ -42,10 +44,12 @@ class Cart():
 	def add(self, product, quantity):
 		product_id = str(product.id)
 		product_qty = str(quantity)
-		# Logic
+		# Process
 		if product_id in self.cart:
+		# Product already exists in the cart
 			pass
 		else:
+			# Add the product to the cart
 			self.cart[product_id] = int(product_qty)
 
 		self.session.modified = True
@@ -61,17 +65,17 @@ class Cart():
 			current_user.update(old_cart=str(carty))
 
 	def cart_total(self):
-		# Get product IDS
+		# Aquire product IDS
 		product_ids = self.cart.keys()
-		# lookup those keys in our products database model
+		# Find the keys in our products database model
 		products = Product.objects.filter(id__in=product_ids)
 		# Get quantities
 		quantities = self.cart
-		# Start counting at 0
+		# Start counting at zero
 		total = 0
 
 		for key, value in quantities.items():
-			# Convert key string into into so we can do math
+			# Convert key that is a string into an integer so we can do math
 			key = int(key)
 			for product in products:
 				if product.id == key:
@@ -79,23 +83,19 @@ class Cart():
 						total = total + (product.sale_price * value)
 					else:
 						total = total + (product.price * value)
-
-
-
 		return total
-
 
 		#Get the length of the cart and return it
 	def __len__(self):
 		return len(self.cart)
 
 	def get_prods(self):
-		# This gets products from cart
+		# This retrieves products from cart
 		product_ids = self.cart.keys()
-		# Use ids to check for the products in database model
+		# Uses ids to check for the products in database model
 		products = Product.objects.filter(id__in=product_ids)
 
-		# Returns found products
+		# Returns the retrieved products
 		return products
 
 	def get_quants(self):
@@ -108,7 +108,7 @@ class Cart():
 
 		# Get cart
 		ourcart = self.cart
-		# Update Dictionary/cart
+		# add Dictionary/cart
 		ourcart[product_id] = product_qty
 
 		self.session.modified = True
