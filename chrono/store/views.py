@@ -7,25 +7,31 @@ from django.shortcuts import redirect, render
 from .forms import SignUpForm
 from .models import Product, Category
 
+
 def index(request):
     """This function renders the 'index.html' template when the 'home' view is accessed.
 
-    :param request: HTTP request object
+    Args:
+        request: HTTP request object
     """
     products = Product.objects.all()
     return render(request, "index.html", {"products": products})
 
+
 def about(request):
     """This function renders the 'about.html' template when the 'about' view is accessed.
 
-    :param request: HTTP request object
+    Args:
+        request: HTTP request object
     """
     return render(request, "about.html")
+
 
 def login_user(request):
     """A function that logs in the user
 
-    :param request: HTTP request object
+    Args:
+        request: HTTP request object
     """
     if request.method == "POST":
         # Login user
@@ -42,19 +48,23 @@ def login_user(request):
     else:
         return render(request, "login.html", {})
 
+
 def logout_user(request):
     """A function that logs out the user
 
-    :param request: HTTP request object
+    Args:
+        request: HTTP request object
     """
     logout(request)
     messages.success(request, "You have been logged out!")
     return redirect("index")
 
+
 def register_user(request):
     """A function that registers the user
 
-    :param request: HTTP request object
+    Args:
+        request: HTTP request object
     """
     form = SignUpForm()
     if request.method == "POST":
@@ -78,27 +88,23 @@ def register_user(request):
         return render(request, "register.html", {"form": form})
 
 
-def product(request,pk):
-	product = Product.objects.get(id=pk)
-	return render(request, 'product.html', {'product':product})
-    return render(request, "about.html")
-
 def product(request, pk):
     """This function renders the 'product.html' template when the 'product' view is accessed.
 
-    :param request: HTTP request object
-    :param pk: product id
-
+    Args:
+        request: HTTP request object
+        pk: product id
     """
     product = Product.objects.get(id=pk)
     return render(request, "product.html", {"product": product})
 
+
 def category(request, abc):
     """This function renders the 'category.html' template when the 'category' view is accessed.
 
-    :param request: HTTP request object
-    :param abc: category id
-
+    Args:
+        request: HTTP request object
+        abc: category id (converted from slug)
     """
     abc = abc.replace("-", " ")
     try:
