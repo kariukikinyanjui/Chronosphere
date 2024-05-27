@@ -76,6 +76,11 @@ def register_user(request):
     else:
         # Render registration form
         return render(request, "register.html", {"form": form})
+
+
+def product(request,pk):
+	product = Product.objects.get(id=pk)
+	return render(request, 'product.html', {'product':product})
     return render(request, "about.html")
 
 def product(request, pk):
