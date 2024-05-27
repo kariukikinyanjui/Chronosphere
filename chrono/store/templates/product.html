@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 
 
@@ -68,7 +70,7 @@
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 <script>
-// Check whether button pressed
+// looks if button pressed
 $(document).on('click', '#add-cart', function(e){
     e.preventDefault();
     $.ajax({
@@ -83,7 +85,6 @@ $(document).on('click', '#add-cart', function(e){
 
         success: function(json){
             document.getElementById("cart_quantity").textContent = json.qty
-            location.reload();
         },
 
         error: function(xhr, errmsg, err){
