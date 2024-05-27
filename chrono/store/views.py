@@ -81,7 +81,6 @@ def register_user(request):
 def product(request,pk):
 	product = Product.objects.get(id=pk)
 	return render(request, 'product.html', {'product':product})
-    return render(request, "about.html")
 
 def product(request, pk):
     """This function renders the 'product.html' template when the 'product' view is accessed.
