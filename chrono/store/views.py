@@ -7,6 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm
 
+
+
 def index(request):
     """
     Renders the 'index.html' template and returns the rendered HTML as a response.
@@ -97,3 +99,9 @@ def register_user(request):
             return redirect('register')
     else:
         return render(request, 'register.html', {'form': form})
+    
+
+
+def product(request, pk):
+    product = Product.objects.get(id=pk)
+    return render(request, 'product.html',{'product': product})
