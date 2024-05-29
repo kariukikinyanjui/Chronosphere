@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from .models import Product
 
-def index(request):
+def home(request):
     """
-    Render the 'store/index.html' template for the given request.
+    Renders the 'store/index.html' template and returns the rendered HTML as a response.
 
     Parameters:
         request (HttpRequest): The HTTP request object.
@@ -10,4 +11,5 @@ def index(request):
     Returns:
         HttpResponse: The rendered HTML response.
     """
-    return render(request, 'index.html', {})
+    products = Product.objects.all()
+    return render(request, 'index.html',{'products': products})  
