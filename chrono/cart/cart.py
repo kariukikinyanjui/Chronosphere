@@ -30,3 +30,12 @@ class Cart():
             self.cart[product_id] = {'price': str(product.price)}
 
         self.session.modified = True
+
+    def __len__(self):
+        """
+        Returns the length of the cart attribute, which represents the number of items in the cart.
+
+        :return: The length of the cart attribute.
+        :rtype: int
+        """
+        return len(self.cart)
