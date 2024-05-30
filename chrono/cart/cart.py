@@ -22,9 +22,17 @@ class Cart():
         self.cart = cart
 
     def add(self, product):
-        product_id = str(product.id)
+        """
+        Adds a product to the cart.
 
-        if product_id not in self.cart:
+        Parameters:
+            product (Product): The product to be added to the cart.
+
+        Returns:
+            None
+        """
+
+        if product_id in self.cart:
             pass
         else:
             self.cart[product_id] = {'price': str(product.price)}
