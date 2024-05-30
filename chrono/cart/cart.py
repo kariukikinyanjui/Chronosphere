@@ -1,3 +1,4 @@
+from store.models import Product
 class Cart():
     def __init__(self, request):
         """
@@ -39,3 +40,14 @@ class Cart():
         :rtype: int
         """
         return len(self.cart)
+
+    def get_prods(self):
+        """
+        Returns a list of the keys in the cart attribute.
+
+        :return: A list of the keys in the cart attribute.
+        :rtype: list
+        """
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        return products

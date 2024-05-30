@@ -13,7 +13,9 @@ def cart_summary(request):
     Returns:
         HttpResponse: The rendered HTML response.
     """
-    return render(request, 'cart_summary.html', {})
+    cart = Cart(request)
+    cart_products = cart.get_prods
+    return render(request, 'cart_summary.html', {"cart_products": cart_products})
 
 
 
