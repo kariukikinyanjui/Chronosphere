@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -101,7 +101,36 @@ def register_user(request):
         return render(request, 'register.html', {'form': form})
     
 
-
 def product(request, pk):
+    """
+    Retrieves a specific product from the database based on the given primary key and renders the 'product.html' template with the product as a context variable.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+        pk (int): The primary key of the product to retrieve.
+
+    Returns:
+        HttpResponse: The rendered HTML response containing the 'product.html' template with the product as a context variable.
+    """
     product = Product.objects.get(id=pk)
     return render(request, 'product.html',{'product': product})
+
+def category(request, abc):
+    """
+    Retrieves products from the database based on the given category and renders the 'category.html' template with the products as a context variable.
+
+    Parameters:
+        request (HttpRequest): The HTTP request object.
+        abc (str): The category to filter products by.
+
+    Returns:
+        HttpResponse: The rendered HTML response containing the 'category.html' template with the products as a context variable.
+    """
+    abc = abc.replace('-', ' ')
+    try:
+        category = Category.objects.get(name=abc)
+        products = Product.objects.filter(category=category)
+        return render(request, 'category.html', {'products': products, 'category': category, 'products': products})
+    except:
+        messages.success(request, 'Category does not exist')
+        return redirect('index')
