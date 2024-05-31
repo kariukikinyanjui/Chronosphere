@@ -75,6 +75,8 @@
 
               <button type="button" data-index="{{product.id}}" 
               class="btn btn-secondary update-cart">Update</button>
+              <button type="button" data-index="{{product.id}}" 
+              class="btn btn-danger delete-product">Delete</button>
             </center>
             </div>
           </div>
@@ -110,6 +112,27 @@
       }
     });
   })
+
+  $(document).on('click', '.delete-product', function(e) {
+    e.preventDefault();
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'cart_delete' %}",
+      data: {
+        product_id: $(this).data('index'),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      },
+      success: function(json) {
+        location.reload();
+      },
+      error: function(xhr, errmsg, err) {
+        // Handle error if needed
+      }
+    });
+  })
+
 </script>
 
  
