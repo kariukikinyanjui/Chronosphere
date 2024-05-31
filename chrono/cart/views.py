@@ -21,16 +21,17 @@ def cart_summary(request):
 
 
 def cart_update(request):
-    """
-    Renders the 'cart_update' template and returns the rendered HTML as a response.
+    cart = Cart(request)
+    if request.POST.get('action') == 'post':
+        
+        product_id = int(request.POST.get('product_id'))
+        product_qty = int(request.POST.get('product_qty'))
 
-    Parameters:
-        request (HttpRequest): The HTTP request object.
+        cart.update(product=product_id, quantity=product_qty)
 
-    Returns:
-        HttpResponse: The rendered HTML response.
-    """
-    pass
+        response = JsonResponse({'qty':product_qty})
+        return response
+
 
 
 def cart_delete(request):
