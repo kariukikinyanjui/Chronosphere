@@ -1,5 +1,8 @@
 from django.db import models
 import datetime
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
 
 
 class Category(models.Model):
@@ -69,3 +72,43 @@ class Order(models.Model):
         :rtype: str
         """
         return self.product
+
+class Profile(models.Model):
+    """
+    Model representing additional information about a user.
+
+    Attributes:
+        user (User): One-to-one relationship with the User model.
+        address1 (str): First line of the address.
+        address2 (str): Second line of the address.
+        city (str): City name.
+        state (str): State or province name.
+        zipcode (str): Postal code.
+        country (str): Country name.
+        old_cart (str): Previous cart data.
+        phone (str): Phone number.
+
+    Methods:
+        __str__: Returns the username of the associated user.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    address1 = models.CharField(max_length=200, blank=True)
+    address2 = models.CharField(max_length=200, blank=True)
+    city = models.CharField(max_length=200, blank=True)
+    state = models.CharField(max_length=200, blank=True)
+    zipcode = models.CharField(max_length=200, blank=True)
+    country = models.CharField(max_length=200, blank=True)
+    old_cart = models.CharField(max_length=200, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        """Return the username of the associated user."""
+        return self.user.username
+    
+# Creates user Profile when user signs up as default
+def create_profile(sender, instance, created, **kwargs):
+	if created:
+		user_profile = Profile(user=instance)
+		user_profile.save()
+# Automation
+post_save.connect(create_profile, sender=User)
