@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm
+from .forms import SignUpForm, UpdateUserForm
 
 
 
@@ -133,4 +133,21 @@ def category(request, abc):
         return render(request, 'category.html', {'products': products, 'category': category, 'products': products})
     except:
         messages.success(request, 'Category does not exist')
+        return redirect('index')
+    
+def update_user(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=request.user.id)
+        user_form   = UpdateUserForm(request.POST or None, instance=current_user)
+
+        if user_form.is_valid():
+            user_form.save()
+
+            login(request, current_user)
+            messages.success(request, 'Your account has been updated!')
+            return redirect('index')
+        
+        return render(request, 'update_user.html', {'user_form': user_form})
+    else:
+        messages.success(request, 'Please login first')
         return redirect('index')
