@@ -34,6 +34,23 @@ class Cart():
 
         self.session.modified = True
 
+    def cart_total(self):
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
+        quantities = self.cart
+        total = 0
+
+        for key, value in quantities.items():
+            key = int(key)
+            for product in products:
+                if product.id == key:
+                    if product.is_sale:
+                        total = total + (product.sale_price * value)
+                    else:
+                        total = total + (product.price * value)
+
+        return total
+
     def __len__(self):
         """
         Returns the length of the cart attribute, which represents the number of items in the cart.
@@ -55,7 +72,7 @@ class Cart():
         return products
     
     def get_quants(self):
-        quantities = self.cart
+        quantities = self.cart 
         return quantities
     
     def update(self, product, quantity):
@@ -69,3 +86,26 @@ class Cart():
 
         thing = self.cart
         return thing
+    
+    def delete(self, product):
+        """
+        Deletes a product from the cart.
+
+        Args:
+            product (Any): The product to be deleted.
+
+        Returns:
+            None
+
+        This function takes a product as an argument and deletes it from the cart. 
+        It first converts the product to a string using the `str()` function. 
+        Then, it checks if the product ID is present in the cart dictionary. 
+        If it is, the product is deleted from the cart using the `del` keyword. 
+        Finally, the `modified` attribute of the session is set to True to indicate that the session has been modified.
+        """
+        product_id = str(product)
+
+        if product_id in self.cart:
+            del self.cart[product_id]
+
+        self.session.modified = True
