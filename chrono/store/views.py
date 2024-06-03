@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .forms import SignUpForm, UpdateUserForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
 
 
 
@@ -151,3 +151,58 @@ def update_user(request):
     else:
         messages.success(request, 'Please login first')
         return redirect('index')
+    
+    
+def update_password(request):
+    """
+    Handles password update functionality for authenticated users.
+
+    If the user is authenticated, this view will:
+    - Render a password change form on a GET request.
+    - Process the submitted form data on a POST request.
+    - Save the new password if the form is valid.
+    - Log the user in with the new password.
+    - Display appropriate success or error messages.
+
+    If the user is not authenticated, it will:
+    - Display a message indicating that login is required.
+    - Redirect the user to the home page.
+
+    Parameters:
+    request (HttpRequest): The HTTP request object containing user and request data.
+
+    Returns:
+    HttpResponse: Redirects to different views based on the flow:
+    - Redirects to 'update_user' upon successful password update.
+    - Redirects to 'update_password' with error messages if the form is invalid.
+    - Redirects to 'home' if the user is not authenticated.
+    - Renders 'update_password.html' with the password change form on a GET request.
+    """
+    
+    if request.user.is_authenticated:
+        current_user = request.user
+        
+        if request.method == 'POST':
+            form = ChangePasswordForm(current_user, request.POST)
+            
+            if form.is_valid():
+                form.save()
+                
+                messages.success(request, "Password Has Been Updated")
+                
+                login(request, current_user)
+                
+                return redirect('update_user')
+            else:
+                for error in list(form.errors.values()):
+                    messages.error(request, error)
+                
+                return redirect('update_password')
+        else:
+            form = ChangePasswordForm(current_user)
+            
+            return render(request, "update_password.html", {'form': form})
+    else:
+        messages.success(request, "To View That Page You Must Be Logged In")
+        
+        return redirect('home')
