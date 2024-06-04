@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from django.db.models import Q
 
 
 
@@ -222,3 +223,25 @@ def update_info(request):
 	else:
 		messages.success(request, "You Must Be Logged In To Access Page!!")
 		return redirect('index')
+
+
+def search(request):
+    """
+    This view function handles the search functionality.
+    
+    Args:
+        request: HttpRequest object
+    
+    Returns:
+        Renders the search.html page with search results if any, or a message if no matching products are found.
+    """
+    if request.method == "POST":
+        searched = request.POST.get('searched', '')
+        searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched))
+        if not searched:
+            messages.success(request, "Product Does Not Exist...Please try Again.")
+            return render(request, "search.html", {})
+        else:
+            return render(request, "search.html", {'searched': searched})
+    else:
+        return render(request, "search.html", {})	
