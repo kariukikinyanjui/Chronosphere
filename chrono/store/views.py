@@ -7,6 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 from django.db.models import Q
+from cart.cart import Cart
+import json
 
 
 
@@ -52,8 +54,22 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
+            #shopping cart
+            current_user = Profile.objects.get(user__id=request.user.id)
+
+            #Get cart from database
+            saved_cart = current_user.old_cart
+
+            #convert string to python dictionary
+            if saved_cart:
+                    converted_cart = json.loads(saved_cart)
+                    cart = Cart(request)
+                    for key,value in converted_cart.items():
+                         cart.db_add(product=key, quantity=value)
+
             messages.success(request, 'You have been logged in!')
             return redirect('index')
+            
         else:
             messages.success(request, 'Error logging in. Please try again.')
             return redirect('login')
