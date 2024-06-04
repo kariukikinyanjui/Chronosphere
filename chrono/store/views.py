@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
 from django.db.models import Q
 from cart.cart import Cart
 import json
@@ -226,19 +228,25 @@ def update_password(request):
 
 
 def update_info(request):
-	if request.user.is_authenticated:
-		current_user = Profile.objects.get(user__id=request.user.id)
-		
-		form = UserInfoForm(request.POST or None, instance=current_user)
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user__id=request.user.id)
+        #user shipping info
+        shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
+        form = UserInfoForm(request.POST or None, instance=current_user)
         
-		if form.is_valid():
-			form.save()
-			messages.success(request, "Info Updated!!")
-			return redirect('index')
-		return render(request, "update_info.html", {'form':form})
-	else:
-		messages.success(request, "You Must Be Logged In To Access Page!!")
-		return redirect('index')
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)		
+        if form.is_valid() or shipping_form.is_valid():
+            form.save()
+            shipping_form.save()
+            
+            messages.success(request, "Your Info Has Been Updated!!")
+            return redirect('index')
+        return render(request, "update_info.html", {'form':form, 'shipping_form':shipping_form})
+    else:
+        messages.success(request, "You Must Be Logged In To Access That Page!!")
+        return redirect('index')
+
+	
 
 
 def search(request):

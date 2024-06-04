@@ -21,14 +21,14 @@ class ShippingAddress(models.Model):
         country (CharField): The country where the address is located.
     """
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-	full_name = models.CharField(max_length=200)
-	email = models.CharField(max_length=245)
-	city = models.CharField(max_length=250)
-	state = models.CharField(max_length=200, null=True, blank=True)
-	zipcode = models.CharField(max_length=245, null=True, blank=True)
-	address1 = models.CharField(max_length=275)
-	address2 = models.CharField(max_length=254, null=True, blank=True)
-	country = models.CharField(max_length=250)
+	shipping_full_name = models.CharField(max_length=200)
+	shipping_email = models.CharField(max_length=245)
+	shipping_city = models.CharField(max_length=250)
+	shipping_state = models.CharField(max_length=200, null=True, blank=True)
+	shipping_zipcode = models.CharField(max_length=245, null=True, blank=True)
+	shipping_address1 = models.CharField(max_length=275)
+	shipping_address2 = models.CharField(max_length=254, null=True, blank=True)
+	shipping_country = models.CharField(max_length=250)
 
 
 
